@@ -1,15 +1,16 @@
 <?php
-
+//Bouwt resistance class op
 class Resistance {
-    public $energytype;
-    public $value;
+    private $energyType;
+    private $value;
 
-        public function __construct($energytype, $value) {
-            $this->energytype    = $energytype;
+        public function __construct($energyType, $value) {
+            $this->energyType    = $energyType;
             $this->value         = $value;
         }
+        
         public function getEnergytype() {
-            return $this->energytype;
+            return $this->energyType;
         }
     
         public function getValue() {

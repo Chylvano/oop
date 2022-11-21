@@ -1,16 +1,17 @@
 <?php
+//Bouwt weakness class op
 
 class Weakness {
-    public $energytype;
-    public $multiplier;
+    private $energyType;
+    private $multiplier;
 
-        public function __construct($energytype, $multiplier) {
-            $this->energytype    = $energytype;
+        public function __construct($energyType, $multiplier) {
+            $this->energyType    = $energyType;
             $this->multiplier    = $multiplier;
         }
        
         public function getEnergytype() {
-            return $this->energytype;
+            return $this->energyType;
         }
     
         public function getMultiplier() {

@@ -1,53 +1,91 @@
 <?php
 
+//Bouwt pokemon class op
 class Pokemon {
     private $name;
-    private $energytype;
+    private $energyType;
     private $hitpoints;
-    private $health;
+    private $weakness;
+    private $resistance;
+    private $attacks;
+    
+    public static $population = 0;
  
-    public function __construct($name, $energytype, $hitpoints, $health) {
+    public function __construct($energyType, $name, $hitpoints, $weakness, $resistance, $attacks) {
+        $this->energyType   = $energyType;
         $this->name         = $name;
-        $this->energytype   = $energytype;
         $this->hitpoints    = $hitpoints;
-        $this->health       = $health;
+        $this->weakness     = $weakness;
+        $this->resistance   = $resistance;
+        $this->attacks      = $attacks;
+    
+        self::$population++;
     }
 
     public function getName() {
-        return $this -> name;
+        return $this->name;
     }
-
-    public function getHealth() {
-        return $this -> health;
-    }
-
-    public function getEnergyType() {
-        return $this -> energytype;
+    
+    public function getEnergytype() {
+        return $this->energyType;
     }
 
     public function getHitpoints() {
-        return $this -> hitpoints;
+        return $this->hitpoints;
     }
 
-    public function getAttack() {
-        return $this -> attack;
+    public function getWeakness() {
+        return $this->weakness;
     }
 
-    function DoAttack($target)
+    public function getResistance() {
+        return $this->resistance;
+    }
+
+    public function getAttacks() {
+        return $this->attacks;
+    }
+
+    public function __toString() {
+        return json_encode($this);
+    }
+
+
+    //Returns damage
+    public function Attack($attack, $pokemon)
     {
-        print $this->name . ' Will attack ' . $target->getName() . ' Using ' . $this->attack[0]->getName();
-        print '<br>';
-        if ($this->energytype == $target->Weakness->energytype) {
-            $target->health = $target->health - ($this->attack[0]->damage * $target->Weakness->multiplier);
-        } else {
-            $target->health = $target->health - $this->attack[0]->damage;
-        }
-
-        if ($target->health < 1) {
-            print $target->name . " Has Died ";
-        } else {
-            print $target->name . " Now Has " . $target->health . " HP Left";
-        }
+        return $this->damage($attack->getDamage(), $pokemon);
     }
-    
+
+
+        //Rekent de damage uit
+    public function damage($damage, $pokemon){
+        foreach($pokemon->getWeakness() as $weakness){
+            if($weakness->getEnergytype() == $this->getEnergytype()){
+                $damage = $damage * $weakness->getMultiplier();
+            }
+        }
+        foreach($pokemon->getResistance() as $resistance){
+            if($this->getEnergytype() == $resistance->getEnergytype()){
+                $damage = $damage - $resistance->getValue();
+            }
+        }
+        $this->calculateHealth($damage, $pokemon);
+            return $damage;
+    }
+
+    //Kijkt of er een pokemon dood is en haalt hem uit de game
+    public function calculateHealth($damage, $pokemon){
+       if($pokemon->getHitpoints() <= $damage){
+            $pokemon->hitpoints = 0;
+            self::$population--;
+       } else {
+        $pokemon->hitpoints = $pokemon->getHitpoints() - $damage;
+       }
+    }
+
+    public static function getPopulation() {
+        return self::$population;
+    }
+
 }

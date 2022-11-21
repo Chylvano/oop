@@ -1,8 +1,9 @@
 <?php
+//Bouwt attack class op
 
 class Attack extends Pokemon {
-    public $attackname;
-    public $damage;
+    private $attackname;
+    private $damage;
 
         public function __construct($attackname, $damage) {
             $this->attackname    = $attackname;
